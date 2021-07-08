@@ -9,10 +9,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float timeSinceLastMove;
     [SerializeField] float speed = 2.5f;
     [SerializeField] float jumpForce = 15;
-    [SerializeField] float speedJumpModifier = 0.02f;
-    //[SerializeField] float turnSpeed = 4;
     float timeToSit = 5;
     public float turnSmoothing = 0.06f;
+    float axisZ, axisX;
 
     Animator animator;
     Rigidbody rb;
@@ -22,8 +21,6 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] bool isOnSomething;
     [SerializeField] bool canJump;
-
-    Quaternion rotation;
 
     // Start is called before the first frame update
     void Awake()
@@ -37,15 +34,16 @@ public class PlayerController : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         horizontalInput = Input.GetAxis("Horizontal");
         verticalInput = Input.GetAxis("Vertical");
 
-        if (horizontalInput != 0)
+        axisX = 0;
+        axisZ = 0;
+
+        if (horizontalInput != 0 || verticalInput != 0)
         {
-            //transform.Rotate(0, horizontalInput, 0);
-            //rotation = Quaternion.Euler(0, horizontalInput * turnSpeed, 0);
-            //rb.MoveRotation(rb.rotation * rotation);
+            timeSinceLastMove = 0;
+            axisZ = 1;
 
             Vector3 forward = cam.transform.TransformDirection(Vector3.forward);
 
@@ -53,6 +51,7 @@ public class PlayerController : MonoBehaviour
             forward = forward.normalized;
 
             Vector3 right = new Vector3(forward.z, 0, -forward.x);
+
             Vector3 targetDirection;
             targetDirection = forward * verticalInput + right * horizontalInput;
 
@@ -65,27 +64,27 @@ public class PlayerController : MonoBehaviour
                 rb.MoveRotation(newRotation);
             }
 
-            timeSinceLastMove = 0;
-        }
-
-
-        if (verticalInput != 0)
-        {
             if (isOnSomething)
             {
-                rb.velocity = transform.TransformDirection(0, 0, verticalInput * speed);
+                rb.velocity = transform.TransformDirection(0, 0, speed);
             }
             else
             {
-                rb.velocity += transform.TransformDirection(0, 0, verticalInput * speed * speedJumpModifier);
+                rb.velocity = transform.TransformDirection(0, rb.velocity.y, speed);
             }
 
-            timeSinceLastMove = 0;
+            
+            if (verticalInput != 0)
+            {
+                axisX = Vector3.SignedAngle(rb.velocity, verticalInput > 0 ? forward : -forward, Vector3.up);
+            }
+            axisX = Mathf.Clamp(axisX, -90f, 90f) / 90f;
+
         }
 
         animator.ResetTrigger("Jump");
-        animator.SetFloat("AxisZ", verticalInput);
-        animator.SetFloat("AxisX", horizontalInput);
+        animator.SetFloat("AxisZ", axisZ, 0.1f, Time.deltaTime);
+        animator.SetFloat("AxisX", axisX, 0.1f, Time.deltaTime);
 
         if (canJump && Input.GetKey(KeyCode.Space))
         {
@@ -99,18 +98,14 @@ public class PlayerController : MonoBehaviour
             rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
 
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
 
         if (timeSinceLastMove < timeToSit)
         {
             timeSinceLastMove += Time.deltaTime;
             animator.ResetTrigger("Sit");
             animator.SetTrigger("StandUp");
-        } else
+        }
+        else
         {
             animator.ResetTrigger("StandUp");
             animator.SetTrigger("Sit");
