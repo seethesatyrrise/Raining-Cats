@@ -5,12 +5,22 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
 
-    [SerializeField] protected GameObject m_PauseMenu;
+    [SerializeField] GameObject pauseMenu;
 
-    //protected int m_EnemyKillCount;
-    protected bool m_IsPaused;
+    [SerializeField] Transform mark;
 
-    private static GameManager s_Instance;
+    [SerializeField] int bananasCount = 0;
+    [SerializeField] int applesCount = 0;
+    [SerializeField] int milkCount = 0;
+
+    public int BananasCount => bananasCount;
+    public int ApplesCount => applesCount;
+    public int MilkCount => milkCount;
+
+    bool isPaused;
+    bool hatEnabled;
+
+    static GameManager s_Instance;
 
     public static GameManager Instance
     {
@@ -29,17 +39,18 @@ public class GameManager : MonoBehaviour
     }
 
 
-
     private void Awake()
     {
         if (s_Instance == null)
         {
             s_Instance = this;
-            //SceneManager.sceneUnloaded -= SceneUnloaded;
         }
 
-        m_IsPaused = false;
-        m_PauseMenu?.SetActive(false);
+        isPaused = false;
+        pauseMenu?.SetActive(false);
+        hatEnabled = false;
+        mark = GameObject.Find("Mark").transform;
+        mark.gameObject.SetActive(false);
     }
 
     private void Update()
@@ -50,31 +61,57 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    /// <summary>
-    /// toggle Pause.
-    /// </summary>
     public void TogglePause()
     {
-        if (m_IsPaused) { Resume(); } else { Pause(); }
+        if (isPaused) { Resume(); } else { Pause(); }
     }
 
-    /// <summary>
-    /// Pause game.
-    /// </summary>
     public void Pause()
     {
         Time.timeScale = 0;
-        m_PauseMenu.SetActive(true);
-        m_IsPaused = true;
+        pauseMenu.SetActive(true);
+        isPaused = true;
     }
 
-    /// <summary>
-    /// Resume game.
-    /// </summary>
     public void Resume()
     {
         Time.timeScale = 1;
-        m_PauseMenu.SetActive(false);
-        m_IsPaused = false;
+        pauseMenu.SetActive(false);
+        isPaused = false;
+    }
+
+    public void PickUpCountUp(string tag)
+    {
+        switch (tag)
+        {
+            case ("Banana"):
+                bananasCount++;
+                break;
+            case ("Apple"):
+                applesCount++;
+                break;
+            case ("Milk"):
+                milkCount++;
+                break;
+            default:
+                Debug.Log("You Picked Up Something Weird");
+                break;
+        }
+
+        if (bananasCount >= 4 && applesCount >= 4 && milkCount >= 4)
+        {
+            hatEnabled = true;
+        }
+    }
+
+    public void GetAttention(Transform item)
+    {
+        mark.gameObject.SetActive(true);
+        mark.position = item.position;
+    }
+
+    public void RemoveMark()
+    {
+        mark.gameObject.SetActive(false);
     }
 }

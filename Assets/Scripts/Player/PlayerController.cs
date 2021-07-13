@@ -39,6 +39,7 @@ public class PlayerController : MonoBehaviour
 
         axisX = 0;
         axisZ = 0;
+        rb.velocity = new Vector3(0, rb.velocity.y, 0);
 
         if (horizontalInput != 0 || verticalInput != 0)
         {
@@ -79,7 +80,6 @@ public class PlayerController : MonoBehaviour
                 axisX = Vector3.SignedAngle(rb.velocity, verticalInput > 0 ? forward : -forward, Vector3.up);
             }
             axisX = Mathf.Clamp(axisX, -90f, 90f) / 90f;
-
         }
 
         animator.ResetTrigger("Jump");

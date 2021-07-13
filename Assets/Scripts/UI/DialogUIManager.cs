@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 public class DialogUIManager : MonoBehaviour
 {
     [SerializeField] GameObject dialogImage;
-    [SerializeField] TMP_Text eText;
+    [SerializeField] GameObject eText;
 
     bool canActivateDialog;
 
-    // Start is called before the first frame update
+    private void Awake()
+    {
+        eText = GameObject.Find("PressE");
+    }
+
     void Start()
     {
         dialogImage.SetActive(false);
-        eText.gameObject.SetActive(false);
         canActivateDialog = false;
     }
 
@@ -24,7 +26,7 @@ public class DialogUIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && canActivateDialog) 
         {
             dialogImage.SetActive(true);
-            eText.gameObject.SetActive(false);
+            eText.SetActive(false);
         }
     }
 
@@ -32,7 +34,7 @@ public class DialogUIManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.gameObject.SetActive(true);
+            eText.SetActive(true);
             canActivateDialog = true;
         }
     }
@@ -41,7 +43,7 @@ public class DialogUIManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.gameObject.SetActive(false);
+            eText.SetActive(false);
             dialogImage.SetActive(false);
             canActivateDialog = false;
         }
