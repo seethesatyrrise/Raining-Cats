@@ -4,51 +4,34 @@ using UnityEngine;
 
 public class Item : MonoBehaviour
 {
-    bool eButtonEnabled;
-
-    [SerializeField] GameObject eText;
-
     Transform cameraTransform;
 
-    bool gotMark;
+    bool closeEnough;
+
+    float minAngle = 10;
 
     private void Awake()
     {
-        eText = GameObject.Find("PressE");
         cameraTransform = Camera.main.transform;
-
-        gotMark = false;
-       // mark = Instantiate(markPrefab, transform.position + markOffset, Quaternion.identity, transform);
     }
 
-    private void Start()
-    {
-        eText.SetActive(false);
-    }
-
-    // Update is called once per frame
     void Update()
     {
-        if (eButtonEnabled)
+        if (closeEnough)
         {
-            Vector3 cameraForward = cameraTransform.forward;
-            Vector3 distance = transform.position - cameraTransform.position;
-            float angle = Vector3.Angle(cameraForward, distance);
+            CheckForAttention();
+        }
+    }
 
-            if (angle < 10)
-            {
-                gotMark = true;
-                GameManager.Instance.GetAttention(transform);
-            }
-            else gotMark = false;
+    private void CheckForAttention()
+    {
+        Vector3 cameraForward = cameraTransform.forward;
+        Vector3 distance = transform.position - cameraTransform.position;
+        float angle = Vector3.Angle(cameraForward, distance);
 
-            if (gotMark && Input.GetKeyDown(KeyCode.E))
-            {
-                GameManager.Instance.PickUpCountUp(gameObject.tag);
-                eText.SetActive(false);
-                GameManager.Instance.RemoveMark();
-                Destroy(gameObject);
-            }
+        if (angle < minAngle)
+        {
+            GameManager.Instance.GetAttention(transform);
         }
     }
 
@@ -56,8 +39,7 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.SetActive(true);
-            eButtonEnabled = true;
+            closeEnough = true;
         }
     }
 
@@ -65,13 +47,9 @@ public class Item : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.SetActive(false);
-            eButtonEnabled = false;
-            if (gotMark)
-            {
-                GameManager.Instance.RemoveMark();
-                gotMark = false;
-            }
+            GameManager.Instance.PressEText(false);
+            closeEnough = false;
+            GameManager.Instance.RemoveMark(transform);
         }
     }
 }

@@ -6,12 +6,15 @@ public class GameManager : MonoBehaviour
 {
 
     [SerializeField] GameObject pauseMenu;
+    [SerializeField] GameObject pressE;
 
     [SerializeField] Transform mark;
+    Transform lastMarkedItem;
 
     [SerializeField] int bananasCount = 0;
     [SerializeField] int applesCount = 0;
     [SerializeField] int milkCount = 0;
+    int winCount = 4;
 
     public int BananasCount => bananasCount;
     public int ApplesCount => applesCount;
@@ -19,6 +22,7 @@ public class GameManager : MonoBehaviour
 
     bool isPaused;
     bool hatEnabled;
+    bool itemMarked;
 
     static GameManager s_Instance;
 
@@ -49,8 +53,9 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         pauseMenu?.SetActive(false);
         hatEnabled = false;
-        mark = GameObject.Find("Mark").transform;
+        itemMarked = false;
         mark.gameObject.SetActive(false);
+        PressEText(false);
     }
 
     private void Update()
@@ -58,6 +63,14 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
+        }
+
+        if (itemMarked && Input.GetKeyDown(KeyCode.E))
+        {
+            PickUpCountUp(lastMarkedItem.gameObject.tag);
+            PressEText(false);
+            RemoveMark(lastMarkedItem);
+            Destroy(lastMarkedItem.gameObject);
         }
     }
 
@@ -80,6 +93,11 @@ public class GameManager : MonoBehaviour
         isPaused = false;
     }
 
+    public void PressEText (bool isActive)
+    {
+        pressE.SetActive(isActive);
+    }
+
     public void PickUpCountUp(string tag)
     {
         switch (tag)
@@ -98,7 +116,7 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if (bananasCount >= 4 && applesCount >= 4 && milkCount >= 4)
+        if (bananasCount >= winCount && applesCount >= winCount && milkCount >= winCount)
         {
             hatEnabled = true;
         }
@@ -108,10 +126,17 @@ public class GameManager : MonoBehaviour
     {
         mark.gameObject.SetActive(true);
         mark.position = item.position;
+        lastMarkedItem = item;
+        itemMarked = true;
+        PressEText(true);
     }
 
-    public void RemoveMark()
+    public void RemoveMark(Transform item)
     {
-        mark.gameObject.SetActive(false);
+        if (lastMarkedItem == item)
+        {
+            mark.gameObject.SetActive(false);
+            itemMarked = false;
+        }
     }
 }

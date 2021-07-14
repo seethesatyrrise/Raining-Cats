@@ -591,7 +591,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenu: {fileID: 499394705}
-  mark: {fileID: 0}
+  pressE: {fileID: 14483873}
+  mark: {fileID: 2050316047}
   bananasCount: 0
   applesCount: 0
   milkCount: 0
@@ -5281,7 +5282,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogImage: {fileID: 502013327}
-  eText: {fileID: 0}
 --- !u!135 &537604637
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6855,7 +6855,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogImage: {fileID: 1577676014}
-  eText: {fileID: 0}
 --- !u!135 &650887552
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -11674,7 +11673,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogImage: {fileID: 203004483}
-  eText: {fileID: 0}
 --- !u!135 &1217379494
 SphereCollider:
   m_ObjectHideFlags: 0

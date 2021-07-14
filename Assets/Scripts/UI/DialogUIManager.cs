@@ -5,13 +5,13 @@ using UnityEngine;
 public class DialogUIManager : MonoBehaviour
 {
     [SerializeField] GameObject dialogImage;
-    [SerializeField] GameObject eText;
+    //[SerializeField] GameObject eText;
 
     bool canActivateDialog;
 
     private void Awake()
     {
-        eText = GameObject.Find("PressE");
+        //eText = GameObject.Find("PressE");
     }
 
     void Start()
@@ -26,7 +26,7 @@ public class DialogUIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && canActivateDialog) 
         {
             dialogImage.SetActive(true);
-            eText.SetActive(false);
+            GameManager.Instance.PressEText(false);
         }
     }
 
@@ -34,7 +34,7 @@ public class DialogUIManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.SetActive(true);
+            GameManager.Instance.PressEText(true);
             canActivateDialog = true;
         }
     }
@@ -43,7 +43,7 @@ public class DialogUIManager : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            eText.SetActive(false);
+            GameManager.Instance.PressEText(false);
             dialogImage.SetActive(false);
             canActivateDialog = false;
         }
