@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] ItemsSpawnManager spawnManager;
+
+    public ItemsSpawnManager SpawnManager => spawnManager;
 
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject pressE;

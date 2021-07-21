@@ -4,11 +4,6 @@ using UnityEngine;
 
 public class ItemsSpawnManager : MonoBehaviour
 {
-
-    [SerializeField] GameObject bananaPrefab;
-    [SerializeField] GameObject applePrefab;
-    [SerializeField] GameObject milkPrefab;
-
     [SerializeField] Transform[] spawnPositions;
 
     float spawnDistance = 5;
@@ -16,15 +11,7 @@ public class ItemsSpawnManager : MonoBehaviour
     int minAmount = 5;
     int maxAmount = 9;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        SpawnItems(bananaPrefab); 
-        SpawnItems(applePrefab); 
-        SpawnItems(milkPrefab); 
-    }
-
-    void SpawnItems(GameObject prefab)
+    public void SpawnItems(GameObject prefab)
     {
         int amount = Random.Range(minAmount, maxAmount);
         for (int i = 0; i < amount; i++)

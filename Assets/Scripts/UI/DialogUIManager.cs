@@ -5,19 +5,22 @@ using UnityEngine;
 public class DialogUIManager : MonoBehaviour
 {
     [SerializeField] GameObject dialogImage;
-    //[SerializeField] GameObject eText;
+    [SerializeField] GameObject mark;
+    [SerializeField] GameObject itemPrefab;
 
     bool canActivateDialog;
+    bool isMarkActive;
 
     private void Awake()
     {
-        //eText = GameObject.Find("PressE");
+        
     }
 
     void Start()
     {
         dialogImage.SetActive(false);
         canActivateDialog = false;
+        isMarkActive = true;
     }
 
     // Update is called once per frame
@@ -26,8 +29,21 @@ public class DialogUIManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.E) && canActivateDialog) 
         {
             dialogImage.SetActive(true);
+            
             GameManager.Instance.PressEText(false);
+
+            if (isMarkActive)
+            {
+                HideMark();
+                GameManager.Instance.SpawnManager.SpawnItems(itemPrefab);
+            }
         }
+    }
+
+    private void HideMark()
+    {
+        mark.SetActive(false);
+        isMarkActive = false;
     }
 
     private void OnTriggerEnter(Collider other)
