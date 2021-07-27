@@ -12,10 +12,7 @@ public class DialogClass : MonoBehaviour
         dialogText = gameObject.GetComponent<TextMeshProUGUI>();
     }
 
-    public virtual void UpdateDialog()
-    {
-        
-    }
+    public virtual void UpdateDialog() { }
 
     private void OnEnable()
     {

@@ -4,12 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    DarkeningManager darkeningManager;
     [SerializeField] ItemsSpawnManager spawnManager;
 
     public ItemsSpawnManager SpawnManager => spawnManager;
 
     [SerializeField] GameObject pauseMenu;
     [SerializeField] GameObject pressE;
+    [SerializeField] GameObject hat;
 
     [SerializeField] Transform mark;
     Transform lastMarkedItem;
@@ -38,7 +40,7 @@ public class GameManager : MonoBehaviour
             s_Instance = FindObjectOfType<GameManager>();
             if (s_Instance == null)
             {
-                s_Instance = new GameObject("Game Manager").AddComponent<GameManager>();
+                s_Instance = new GameObject("Manager").AddComponent<GameManager>();
             }
 
             return s_Instance;
@@ -59,6 +61,7 @@ public class GameManager : MonoBehaviour
         itemMarked = false;
         mark.gameObject.SetActive(false);
         PressEText(false);
+        darkeningManager = GetComponent<DarkeningManager>();
     }
 
     private void Update()
@@ -122,6 +125,10 @@ public class GameManager : MonoBehaviour
         if (bananasCount >= winCount && applesCount >= winCount && milkCount >= winCount)
         {
             hatEnabled = true;
+        }
+        else if(bananasCount + applesCount + milkCount < winCount * 3)
+        {
+            darkeningManager.DecreaseIntensity();
         }
     }
 
