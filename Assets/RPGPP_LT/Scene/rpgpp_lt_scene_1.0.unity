@@ -596,6 +596,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d032dcbfaa306184095ec806f878b1c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  catsManager: {fileID: 650887550}
   spawnManager: {fileID: 704164714}
   pauseMenu: {fileID: 499394705}
   pressE: {fileID: 14483873}
@@ -604,6 +605,7 @@ MonoBehaviour:
   bananasCount: 0
   applesCount: 0
   milkCount: 0
+  hatEnabled: 0
 --- !u!4 &53524315
 Transform:
   m_ObjectHideFlags: 0

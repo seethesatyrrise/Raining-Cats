@@ -9,18 +9,13 @@ public class DialogUIManager : MonoBehaviour
     [SerializeField] GameObject itemPrefab;
 
     bool canActivateDialog;
-    bool isMarkActive;
-
-    private void Awake()
-    {
-        
-    }
+    bool firstPass;
 
     void Start()
     {
         dialogImage.SetActive(false);
         canActivateDialog = false;
-        isMarkActive = true;
+        firstPass = true;
     }
 
     // Update is called once per frame
@@ -32,10 +27,12 @@ public class DialogUIManager : MonoBehaviour
             
             GameManager.Instance.PressEText(false);
 
-            if (isMarkActive)
+            HideMark();
+
+            if (firstPass)
             {
-                HideMark();
                 GameManager.Instance.SpawnManager.SpawnItems(itemPrefab);
+                firstPass = false;
             }
         }
     }
@@ -43,7 +40,11 @@ public class DialogUIManager : MonoBehaviour
     private void HideMark()
     {
         mark.SetActive(false);
-        isMarkActive = false;
+    }
+
+    public void ShowMark()
+    {
+        mark.SetActive(true);
     }
 
     private void OnTriggerEnter(Collider other)

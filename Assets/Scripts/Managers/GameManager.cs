@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     DarkeningManager darkeningManager;
+    [SerializeField] DialogUIManager catsManager;
     [SerializeField] ItemsSpawnManager spawnManager;
 
     public ItemsSpawnManager SpawnManager => spawnManager;
@@ -26,8 +27,12 @@ public class GameManager : MonoBehaviour
     public int MilkCount => milkCount;
 
     bool isPaused;
-    bool hatEnabled;
     bool itemMarked;
+    [SerializeField] bool hatEnabled;
+    bool hatIsOn;
+
+    public bool HatEnabled => hatEnabled;
+    public bool HatIsOn => hatIsOn;
 
     static GameManager s_Instance;
 
@@ -58,6 +63,7 @@ public class GameManager : MonoBehaviour
         isPaused = false;
         pauseMenu?.SetActive(false);
         hatEnabled = false;
+        hatIsOn = false;
         itemMarked = false;
         mark.gameObject.SetActive(false);
         PressEText(false);
@@ -122,9 +128,9 @@ public class GameManager : MonoBehaviour
                 break;
         }
 
-        if (bananasCount >= winCount && applesCount >= winCount && milkCount >= winCount)
+        if (bananasCount >= winCount && applesCount >= winCount && milkCount >= winCount && !hatIsOn)
         {
-            hatEnabled = true;
+            EnableHat();
         }
         else if(bananasCount + applesCount + milkCount < winCount * 3)
         {
@@ -148,5 +154,18 @@ public class GameManager : MonoBehaviour
             mark.gameObject.SetActive(false);
             itemMarked = false;
         }
+    }
+
+    void EnableHat()
+    {
+        hatEnabled = true;
+        catsManager.ShowMark();
+    }
+
+    public void PutHatOn()
+    {
+        hatEnabled = false;
+        hatIsOn = true;
+        hat.SetActive(true);
     }
 }

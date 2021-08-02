@@ -9,5 +9,9 @@ public class CatDialog : DialogClass
     {
         Debug.Log("cat");
         dialogText.text = "Caaat";
+        if (GameManager.Instance.HatEnabled)
+        {
+            GameManager.Instance.PutHatOn();
+        }
     }
 }
